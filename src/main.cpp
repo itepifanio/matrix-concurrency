@@ -2,6 +2,8 @@
 
 int main() {
     Matrix m;
-    m.readFromFile("../data/text.txt");
+    m.readFromFile("./data/test.txt");
+    m.print();
+
     return 0;
 }

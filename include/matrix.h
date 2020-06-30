@@ -4,10 +4,10 @@
 #include <vector>
 
 class Matrix{
-    private:
-        std::vector<int> matrix;
     public:
         void readFromFile(std::string filename);
+        void print();
+        std::vector<std::vector<int>> matrix;
 };
 
 #endif
