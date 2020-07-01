@@ -1,0 +1,5 @@
+- [x] Ler arquivo
+- [x] Ler todos os arquivos passados pelo professor
+- [ ] Calcular matrizes sequencialmente
+- [ ] Calcular matrizes com threads
+- [ ] Fazer relatórios

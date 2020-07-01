@@ -7,6 +7,8 @@ void Matrix::readFromFile(std::string filename)
 {
     std::string line;
     std::ifstream myfile(filename);
+    std::getline(myfile, line); // ignore file header
+    
     if (myfile.is_open())
     {
         std::vector<int> temp;
