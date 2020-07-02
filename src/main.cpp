@@ -1,24 +1,35 @@
-#include "../include/matrix.h"
 #include <sys/types.h>
 #include <iostream>
 #include <dirent.h>
+#include "../include/matrix.h"
 
-void read_directory(const std::string& name)
+void read_directory(const std::string &name)
 {
-    DIR* dirp = opendir(name.c_str());
-    struct dirent * dp;
-    while ((dp = readdir(dirp)) != NULL) {
-        std::cout << (dp->d_name) << std::endl;
-        Matrix m;
-        m.readFromFile(name + "/" + dp->d_name);
-        m.print();
+    DIR *dirp = opendir(name.c_str());
+    struct dirent *dp;
+    
+    while ((dp = readdir(dirp)) != NULL)
+    {
+        std::string filename = dp->d_name;
+
+        if (dp->d_name[0] == 'A')
+        {
+            Matrix a, b, c;
+            //a.readFromFile(name + "/" + filename); // read matrix A
+            //b.readFromFile(name + "/" + filename.replace(0,1, "B")); // read matrix b
+            a.readFromFile("./data/A4x4.txt");
+            b.readFromFile("./data/B4x4.txt");
+            c.multiply(a, b);
+            c.print();
+        }
         break; // read only one
     }
+    
     closedir(dirp);
 }
 
-
-int main() {
+int main()
+{
     std::string directory = "./data";
     read_directory(directory);
     //Matrix m;

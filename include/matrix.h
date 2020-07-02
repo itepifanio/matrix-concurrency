@@ -8,6 +8,7 @@ class Matrix{
         void readFromFile(std::string filename);
         void print();
         std::vector<std::vector<int>> matrix;
+        void multiply(Matrix a, Matrix b);
 };
 
 #endif
