@@ -1,5 +1,5 @@
 PROG = bin/exec
-CC = g++
+CC = g++ -pthread
 CPPFLAGS = -O0 -g -W -Wall -pedantic -std=c++11
 OBJS = main.o matrix.o
 

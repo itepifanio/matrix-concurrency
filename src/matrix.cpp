@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <thread>
 
 void Matrix::readFromFile(std::string filename)
 {
@@ -58,11 +59,10 @@ void Matrix::multiply(Matrix a, Matrix b)
     {
         for (j = 0; j < b.matrix.size(); j++)
         {
-            temp.push_back(0);       
+            temp.push_back(0);
         }
         this->matrix.push_back(temp);
     }
-
 
     for (i = 0; i < a.matrix.size(); i++)
     {
@@ -73,5 +73,50 @@ void Matrix::multiply(Matrix a, Matrix b)
                 this->matrix[i][j] += a.matrix[i][k] * b.matrix[k][j];
             }
         }
+    }
+}
+
+/** Interpreter the matrix as an array and do your thing */
+void Matrix::multiplyWithThreads(Matrix a, Matrix b, int numThread, unsigned int numTotalThreads = 4)
+{
+    std::cout << "hue" << std::endl;
+    unsigned int matrixSize = a.matrix.size();
+    // calculates the part that this current thread will multiply
+    unsigned int numElements = (matrixSize * matrixSize);
+    // Our matrixes are always divided by 4 so we don't really care about rest of this division
+    unsigned int numOperations = numElements / numTotalThreads;
+
+    unsigned int begin, end;
+
+    begin = numOperations * numThread;
+    end = numOperations * numThread + 1;
+
+    this->loadInsideMatrix(matrixSize);
+
+    for (unsigned int i = begin; i < end; i++)
+    {
+        int row = i % matrixSize;
+        int col = i / matrixSize;
+        int r;
+        for (unsigned int k = 0; i < matrixSize; ++i)
+        {
+            r += a.matrix[row][k] * b.matrix[i][col];
+        }
+        
+        this->matrix[row][col] = r;
+    }
+}
+
+void Matrix::loadInsideMatrix(int size)
+{
+    std::vector<int> temp;
+    unsigned int i, j;
+    for (i = 0; i < size; i++)
+    {
+        for (j = 0; j < size; j++)
+        {
+            temp.push_back(0);
+        }
+        this->matrix.push_back(temp);
     }
 }
