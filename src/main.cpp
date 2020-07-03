@@ -44,6 +44,8 @@ int main()
 
     const unsigned int numThreads = 4;
     std::thread threads[numThreads];
+    
+    c.loadInsideMatrix(a.matrix.size()); // workaround
 
     for (int i = 0; (unsigned) i < numThreads; ++i)
     {

@@ -79,7 +79,7 @@ void Matrix::multiply(Matrix a, Matrix b)
 /** Interpreter the matrix as an array and do your thing */
 void Matrix::multiplyWithThreads(Matrix a, Matrix b, int numThread, unsigned int numTotalThreads = 4)
 {
-    std::cout << "hue" << std::endl;
+    std::cout << numThread << std::endl;
     unsigned int matrixSize = a.matrix.size();
     // calculates the part that this current thread will multiply
     unsigned int numElements = (matrixSize * matrixSize);
@@ -91,8 +91,6 @@ void Matrix::multiplyWithThreads(Matrix a, Matrix b, int numThread, unsigned int
     begin = numOperations * numThread;
     end = numOperations * numThread + 1;
 
-    this->loadInsideMatrix(matrixSize);
-
     for (unsigned int i = begin; i < end; i++)
     {
         int row = i % matrixSize;
@@ -102,7 +100,7 @@ void Matrix::multiplyWithThreads(Matrix a, Matrix b, int numThread, unsigned int
         {
             r += a.matrix[row][k] * b.matrix[i][col];
         }
-        
+        std::cout << r << std::endl;
         this->matrix[row][col] = r;
     }
 }
@@ -111,9 +109,9 @@ void Matrix::loadInsideMatrix(int size)
 {
     std::vector<int> temp;
     unsigned int i, j;
-    for (i = 0; i < size; i++)
+    for (i = 0; i < (unsigned) size; i++)
     {
-        for (j = 0; j < size; j++)
+        for (j = 0; j < (unsigned) size; j++)
         {
             temp.push_back(0);
         }
