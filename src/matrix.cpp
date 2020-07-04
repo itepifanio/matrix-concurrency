@@ -57,22 +57,16 @@ void Matrix::print()
 
 void Matrix::multiply(Matrix a, Matrix b)
 {
-    std::vector<int> temp;
     unsigned int i, j, k;
-    for (i = 0; i < a.matrix.size(); i++)
-    {
-        for (j = 0; j < b.matrix.size(); j++)
-        {
-            temp.push_back(0);
-        }
-        this->matrix.push_back(temp);
-    }
+    unsigned int matrixSize = a.matrix.size();
 
-    for (i = 0; i < a.matrix.size(); i++)
+    this->loadMatrixWithZeros(matrixSize);
+
+    for (i = 0; i < matrixSize; i++)
     {
-        for (j = 0; j < b.matrix.size(); j++)
+        for (j = 0; j < matrixSize; j++)
         {
-            for (k = 0; k < a.matrix.size(); k++)
+            for (k = 0; k < matrixSize; k++)
             {
                 this->matrix[i][j] += a.matrix[i][k] * b.matrix[k][j];
             }
@@ -107,7 +101,7 @@ void Matrix::multiplyWithThreads(Matrix a, Matrix b, int numThread, unsigned int
     }
 }
 
-void Matrix::loadInsideMatrix(int size)
+void Matrix::loadMatrixWithZeros(int size)
 {
     std::vector<int> temp;
     unsigned int i, j;
