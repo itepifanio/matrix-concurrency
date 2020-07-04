@@ -1,7 +1,6 @@
 #include "../include/handler.h"
 #include "../include/matrix.h"
 #include <chrono>
-#include <ctime>
 #include <string>
 #include <thread>
 #include <iostream>
@@ -44,11 +43,8 @@ void Handler::execute()
     }
     
     auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> elapsed_seconds = end-start;
-    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
-    std::cout << "finished computation at " << std::ctime(&end_time)
-              << "elapsed time: " << elapsed_seconds.count() << "s\n";
-    //c.print();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    std::cout << duration.count() << std::endl;
     c.writeMatrix(this->getMatrixFileName("C"));
 }
 

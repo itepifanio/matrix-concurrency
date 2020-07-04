@@ -10,7 +10,8 @@ bool isUnsigned(char number[])
         return false;
     for (; number[i] != 0; i++)
     {
-        if (!isdigit(number[i])){
+        if (!isdigit(number[i]))
+        {
             return false;
         }
     }
@@ -19,16 +20,18 @@ bool isUnsigned(char number[])
 
 int main(int argc, char *argv[])
 {
-    std::cout << isdigit(atoi(argv[1])) << std::endl;
-    std::cout << std::string(argv[1]) << std::endl;
-    std::cout << std::string(argv[2]) << std::endl;
-
     if (argc == 3 && isUnsigned(argv[1]) && (std::string(argv[2]) == "C" || std::string(argv[2]) == "S"))
     {
         std::string size = std::string(argv[1]);
         std::string type = std::string(argv[2]);
+        
+        std::cout << size + " " + type << std::endl;
+
         Handler h(size, type);
-        h.execute();
+        for (int i = 0; i < 20; i++) // to execute the whole thing
+        {
+            h.execute(); // this will print the time and I will get a file from shell
+        }
     }
     else
     {
