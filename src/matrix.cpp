@@ -22,8 +22,8 @@ void Matrix::readFromFile(std::string filename)
                 buffer.push_back(c);
             }
 
-            if(c == ' '){
-                std::cout << buffer << std::endl;
+            if (c == ' ')
+            {
                 temp.push_back(std::stoi(buffer));
                 buffer = "";
             }
@@ -88,16 +88,11 @@ void Matrix::multiplyWithThreads(Matrix a, Matrix b, int numThread, unsigned int
     unsigned int numElements = (matrixSize * matrixSize);
     // Our matrixes are always divided by 4 so we don't really care about rest of this division
     unsigned int numOperations = numElements / numTotalThreads;
-    unsigned int restOperations = numElements % numTotalThreads;
+
     unsigned int begin, end;
 
-    if(numThread == 0){
-        begin = numOperations * numThread;
-        end = (numOperations * (numThread + 1)) + restOperations;
-    } else {
-        begin = numOperations * numThread + restOperations;
-        end = (numOperations * (numThread+1)) + restOperations;
-    }
+    begin = numOperations * numThread;
+    end = (numOperations * (numThread + 1));
 
     for (unsigned int i = begin; i < end; ++i)
     {
@@ -106,7 +101,6 @@ void Matrix::multiplyWithThreads(Matrix a, Matrix b, int numThread, unsigned int
         int r = 0;
         for (unsigned int k = 0; k < matrixSize; ++k)
         {
-            //std::cout << a.matrix[row][k] << " x " << b.matrix[k][col] << std::endl;
             r += a.matrix[row][k] * b.matrix[k][col];
         }
         this->matrix[row][col] = r;
@@ -117,9 +111,9 @@ void Matrix::loadInsideMatrix(int size)
 {
     std::vector<int> temp;
     unsigned int i, j;
-    for (i = 0; i < (unsigned) size; i++)
+    for (i = 0; i < (unsigned)size; i++)
     {
-        for (j = 0; j < (unsigned) size; j++)
+        for (j = 0; j < (unsigned)size; j++)
         {
             temp.push_back(0);
         }
