@@ -1,7 +1,10 @@
 #include "../include/handler.h"
 #include "../include/matrix.h"
+#include <chrono>
+#include <ctime>
 #include <string>
 #include <thread>
+#include <iostream>
 
 Handler::Handler(std::string matrixSize, std::string type)
 {
@@ -15,7 +18,9 @@ void Handler::execute()
 
     a.readFromFile(this->getMatrixFileName("A"));
     b.readFromFile(this->getMatrixFileName("B"));
-
+    
+    auto start = std::chrono::system_clock::now();
+    
     if (type == "S")
     {
         c.multiply(std::ref(a), std::ref(b));
@@ -38,7 +43,13 @@ void Handler::execute()
         }
     }
     
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end-start;
+    std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+    std::cout << "finished computation at " << std::ctime(&end_time)
+              << "elapsed time: " << elapsed_seconds.count() << "s\n";
     //c.print();
+    c.writeMatrix(this->getMatrixFileName("C"));
 }
 
 std::string Handler::getMatrixFileName(std::string letter)

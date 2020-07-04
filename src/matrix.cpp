@@ -114,3 +114,26 @@ void Matrix::loadMatrixWithZeros(int size)
         this->matrix.push_back(temp);
     }
 }
+
+void Matrix::writeMatrix(std::string filename)
+{
+    std::ofstream myfile;
+
+    unsigned int i, j;
+    unsigned int matrixSize = this->matrix.size();
+
+    myfile.open(filename);
+
+    myfile << (std::to_string(matrixSize) + " " + std::to_string(matrixSize)) << " \n";
+
+    for (i = 0; i < matrixSize; i++)
+    {
+        for (j = 0; j < matrixSize; j++)
+        {
+            myfile << (std::to_string(this->matrix[i][j]) + " ");
+        }
+        myfile << "\n";
+    }
+
+    myfile.close();
+}

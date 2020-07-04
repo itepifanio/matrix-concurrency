@@ -11,6 +11,7 @@ class Matrix{
         void multiply(Matrix a, Matrix b); // override multiplication operator sucks
         void multiplyWithThreads(Matrix a, Matrix b, int numThread, unsigned int numTotalThreads);
         void loadMatrixWithZeros(int size);
+        void writeMatrix(std::string filename);
 };
 
 #endif
