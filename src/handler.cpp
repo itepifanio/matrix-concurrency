@@ -16,9 +16,9 @@ void Handler::execute()
     a.readFromFile(this->getMatrixFileName("A"));
     b.readFromFile(this->getMatrixFileName("B"));
 
-    if (type == "C")
+    if (type == "S")
     {
-        c.multiply(a, b);
+        c.multiply(std::ref(a), std::ref(b));
     }
     else
     {
@@ -29,7 +29,7 @@ void Handler::execute()
 
         for (int i = 0; (unsigned) i < numThreads; ++i)
         {
-            threads[i] = std::thread(&Matrix::multiplyWithThreads, &c, a, b, i, numThreads);
+            threads[i] = std::thread(&Matrix::multiplyWithThreads, &c, std::ref(a), std::ref(b), i, numThreads);
         }
 
         for (int i = 0; (unsigned) i < numThreads; i++)
@@ -38,7 +38,7 @@ void Handler::execute()
         }
     }
     
-    c.print();
+    //c.print();
 }
 
 std::string Handler::getMatrixFileName(std::string letter)
