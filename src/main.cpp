@@ -45,8 +45,8 @@ int main()
     const unsigned int numThreads = 4;
     std::thread threads[numThreads];
     
-    c.loadInsideMatrix(a.matrix.size()); // workaround
-
+    c.loadInsideMatrix(4); // workaround
+    a.print();
     for (int i = 0; (unsigned) i < numThreads; ++i)
     {
         threads[i] = std::thread(&Matrix::multiplyWithThreads, &c, a, b, i, numThreads);

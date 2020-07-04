@@ -14,22 +14,26 @@ void Matrix::readFromFile(std::string filename)
     {
         std::vector<int> temp;
         char c;
-        int i = 0, j = 0;
+        std::string buffer; // buffer to safe the whole number of the txt
         while (myfile.get(c))
         {
             if (c != ' ' && c != '\n')
             {
-                temp.push_back(c - '0'); // workaround to convert to int
+                buffer.push_back(c);
+            }
+
+            if(c == ' '){
+                std::cout << buffer << std::endl;
+                temp.push_back(std::stoi(buffer));
+                buffer = "";
             }
 
             if (c == '\n')
             {
+                buffer = "";
                 this->matrix.push_back(temp);
                 temp.clear();
-                j++;
             }
-
-            i++;
         }
     }
     else
@@ -79,28 +83,32 @@ void Matrix::multiply(Matrix a, Matrix b)
 /** Interpreter the matrix as an array and do your thing */
 void Matrix::multiplyWithThreads(Matrix a, Matrix b, int numThread, unsigned int numTotalThreads = 4)
 {
-    std::cout << numThread << std::endl;
     unsigned int matrixSize = a.matrix.size();
     // calculates the part that this current thread will multiply
     unsigned int numElements = (matrixSize * matrixSize);
     // Our matrixes are always divided by 4 so we don't really care about rest of this division
     unsigned int numOperations = numElements / numTotalThreads;
-
+    unsigned int restOperations = numElements % numTotalThreads;
     unsigned int begin, end;
 
-    begin = numOperations * numThread;
-    end = numOperations * numThread + 1;
+    if(numThread == 0){
+        begin = numOperations * numThread;
+        end = (numOperations * (numThread + 1)) + restOperations;
+    } else {
+        begin = numOperations * numThread + restOperations;
+        end = (numOperations * (numThread+1)) + restOperations;
+    }
 
-    for (unsigned int i = begin; i < end; i++)
+    for (unsigned int i = begin; i < end; ++i)
     {
         int row = i % matrixSize;
         int col = i / matrixSize;
-        int r;
-        for (unsigned int k = 0; i < matrixSize; ++i)
+        int r = 0;
+        for (unsigned int k = 0; k < matrixSize; ++k)
         {
-            r += a.matrix[row][k] * b.matrix[i][col];
+            //std::cout << a.matrix[row][k] << " x " << b.matrix[k][col] << std::endl;
+            r += a.matrix[row][k] * b.matrix[k][col];
         }
-        std::cout << r << std::endl;
         this->matrix[row][col] = r;
     }
 }
