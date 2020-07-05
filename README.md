@@ -1,7 +1,7 @@
 - [x] Ler arquivo
 - [x] Ler todos os arquivos passados pelo professor
 - [x] Calcular matrizes sequencialmente
-- [ ] Calcular matrizes com threads
+- [x] Calcular matrizes com threads
 - [ ] Fazer relatórios
 
 Bibliografia utilizada

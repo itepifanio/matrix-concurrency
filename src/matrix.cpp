@@ -14,22 +14,26 @@ void Matrix::readFromFile(std::string filename)
     {
         std::vector<int> temp;
         char c;
-        int i = 0, j = 0;
+        std::string buffer; // buffer to safe the whole number of the txt
         while (myfile.get(c))
         {
             if (c != ' ' && c != '\n')
             {
-                temp.push_back(c - '0'); // workaround to convert to int
+                buffer.push_back(c);
+            }
+
+            if (c == ' ')
+            {
+                temp.push_back(std::stoi(buffer));
+                buffer = "";
             }
 
             if (c == '\n')
             {
+                buffer = "";
                 this->matrix.push_back(temp);
                 temp.clear();
-                j++;
             }
-
-            i++;
         }
     }
     else
@@ -53,22 +57,16 @@ void Matrix::print()
 
 void Matrix::multiply(Matrix a, Matrix b)
 {
-    std::vector<int> temp;
     unsigned int i, j, k;
-    for (i = 0; i < a.matrix.size(); i++)
-    {
-        for (j = 0; j < b.matrix.size(); j++)
-        {
-            temp.push_back(0);
-        }
-        this->matrix.push_back(temp);
-    }
+    unsigned int matrixSize = a.matrix.size();
 
-    for (i = 0; i < a.matrix.size(); i++)
+    this->loadMatrixWithZeros(matrixSize);
+
+    for (i = 0; i < matrixSize; i++)
     {
-        for (j = 0; j < b.matrix.size(); j++)
+        for (j = 0; j < matrixSize; j++)
         {
-            for (k = 0; k < a.matrix.size(); k++)
+            for (k = 0; k < matrixSize; k++)
             {
                 this->matrix[i][j] += a.matrix[i][k] * b.matrix[k][j];
             }
@@ -79,7 +77,6 @@ void Matrix::multiply(Matrix a, Matrix b)
 /** Interpreter the matrix as an array and do your thing */
 void Matrix::multiplyWithThreads(Matrix a, Matrix b, int numThread, unsigned int numTotalThreads = 4)
 {
-    std::cout << numThread << std::endl;
     unsigned int matrixSize = a.matrix.size();
     // calculates the part that this current thread will multiply
     unsigned int numElements = (matrixSize * matrixSize);
@@ -89,32 +86,54 @@ void Matrix::multiplyWithThreads(Matrix a, Matrix b, int numThread, unsigned int
     unsigned int begin, end;
 
     begin = numOperations * numThread;
-    end = numOperations * numThread + 1;
+    end = (numOperations * (numThread + 1));
 
-    for (unsigned int i = begin; i < end; i++)
+    for (unsigned int i = begin; i < end; ++i)
     {
         int row = i % matrixSize;
         int col = i / matrixSize;
-        int r;
-        for (unsigned int k = 0; i < matrixSize; ++i)
+        int r = 0;
+        for (unsigned int k = 0; k < matrixSize; ++k)
         {
-            r += a.matrix[row][k] * b.matrix[i][col];
+            r += a.matrix[row][k] * b.matrix[k][col];
         }
-        std::cout << r << std::endl;
         this->matrix[row][col] = r;
     }
 }
 
-void Matrix::loadInsideMatrix(int size)
+void Matrix::loadMatrixWithZeros(int size)
 {
     std::vector<int> temp;
     unsigned int i, j;
-    for (i = 0; i < (unsigned) size; i++)
+    for (i = 0; i < (unsigned)size; i++)
     {
-        for (j = 0; j < (unsigned) size; j++)
+        for (j = 0; j < (unsigned)size; j++)
         {
             temp.push_back(0);
         }
         this->matrix.push_back(temp);
     }
+}
+
+void Matrix::writeMatrix(std::string filename)
+{
+    std::ofstream myfile;
+
+    unsigned int i, j;
+    unsigned int matrixSize = this->matrix.size();
+
+    myfile.open(filename);
+
+    myfile << (std::to_string(matrixSize) + " " + std::to_string(matrixSize)) << " \n";
+
+    for (i = 0; i < matrixSize; i++)
+    {
+        for (j = 0; j < matrixSize; j++)
+        {
+            myfile << (std::to_string(this->matrix[i][j]) + " ");
+        }
+        myfile << "\n";
+    }
+
+    myfile.close();
 }

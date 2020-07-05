@@ -10,7 +10,8 @@ class Matrix{
         std::vector<std::vector<int>> matrix;
         void multiply(Matrix a, Matrix b); // override multiplication operator sucks
         void multiplyWithThreads(Matrix a, Matrix b, int numThread, unsigned int numTotalThreads);
-        void loadInsideMatrix(int size);
+        void loadMatrixWithZeros(int size);
+        void writeMatrix(std::string filename);
 };
 
 #endif

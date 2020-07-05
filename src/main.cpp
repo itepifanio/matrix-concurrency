@@ -1,63 +1,42 @@
-#include <sys/types.h>
+#include "../include/handler.h"
+#include <ctype.h>
 #include <iostream>
-#include <dirent.h>
-#include <thread>
-#include "../include/matrix.h"
 
-void read_directory(const std::string &name)
+bool isUnsigned(char number[])
 {
-    DIR *dirp = opendir(name.c_str());
-    struct dirent *dp;
+    int i = 0;
 
-    while ((dp = readdir(dirp)) != NULL)
+    if (number[0] == '-')
+        return false;
+    for (; number[i] != 0; i++)
     {
-        std::string filename = dp->d_name;
-
-        if (dp->d_name[0] == 'A')
+        if (!isdigit(number[i]))
         {
-            Matrix a, b, c;
-            std::cout << name + "/" + filename << std::endl;
-            //a.readFromFile(name + "/" + filename); // read matrix A
-            //b.readFromFile(name + "/" + filename.replace(0,1, "B")); // read matrix b
-            a.readFromFile("./data/A4x4.txt");
-            b.readFromFile("./data/B4x4.txt");
-            c.multiply(a, b);
-            //c.print();
+            return false;
         }
     }
-
-    closedir(dirp);
+    return true;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-    //std::string directory = "./data";
-    //read_directory(directory);
-    //Matrix m;
-    //m.readFromFile("./data/test.txt");
-    //m.print();
-
-    // multithreading
-    Matrix a, b, c;
-    a.readFromFile("./data/A4x4.txt");
-    b.readFromFile("./data/B4x4.txt");
-
-    const unsigned int numThreads = 4;
-    std::thread threads[numThreads];
-    
-    c.loadInsideMatrix(a.matrix.size()); // workaround
-
-    for (int i = 0; (unsigned) i < numThreads; ++i)
+    if (argc == 3 && isUnsigned(argv[1]) && (std::string(argv[2]) == "C" || std::string(argv[2]) == "S"))
     {
-        threads[i] = std::thread(&Matrix::multiplyWithThreads, &c, a, b, i, numThreads);
-    }
+        std::string size = std::string(argv[1]);
+        std::string type = std::string(argv[2]);
+        
+        std::cout << size + " " + type << std::endl;
 
-    for (int i = 0; (unsigned) i < numThreads; i++)
+        Handler h(size, type);
+        for (int i = 0; i < 20; i++) // to execute the whole thing
+        {
+            h.execute(); // this will print the time and I will get a file from shell
+        }
+    }
+    else
     {
-        threads[i].join();
+        std::cout << "Invalid args" << std::endl;
     }
-
-    c.print();
 
     return 0;
 }
