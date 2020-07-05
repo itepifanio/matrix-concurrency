@@ -1,6 +1,7 @@
 #custom
 .vscode
 data/C*
+venv
 
 # Prerequisites
 *.d
